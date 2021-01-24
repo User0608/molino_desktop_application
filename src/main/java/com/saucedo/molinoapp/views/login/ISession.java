@@ -1,7 +1,8 @@
 package com.saucedo.molinoapp.views.login;
 
-import java.util.Set;
+
+import com.saucedo.molino_json_models.security.SessionResponse;
 
 public interface ISession {
-	public void startSession(String token,String userName,Set<String> roles);
+	public void startSession(SessionResponse r);
 }

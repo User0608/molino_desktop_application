@@ -1,11 +1,12 @@
 package com.saucedo.molinoapp;
 
-import java.util.Set;
+import java.util.List;
+
 
 public class SessionStatus {
 	private String token;
 	private String username;
-	private Set<String> roles;
+	private List<String> roles;
 	private static final Object object = new Object();
 	private static SessionStatus instance;
 
@@ -26,10 +27,10 @@ public class SessionStatus {
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	public Set<String> getRoles() {
+	public List<String> getRoles() {
 		return roles;
 	}
-	public void setRoles(Set<String> roles) {
+	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
 	
@@ -50,6 +51,9 @@ public class SessionStatus {
 
 			return SessionStatus.instance;
 		}
+	}
+	public static boolean isStarted() {
+		return SessionStatus.instance!=null;
 	}
 	public static void destroySession() {
 		SessionStatus.instance=null;

@@ -4,9 +4,10 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
+import com.saucedo.molino_json_models.security.SessionResponse;
 import com.saucedo.molinoapp.Config;
 import com.saucedo.molinoapp.SessionStatus;
 import com.saucedo.molinoapp.views.IMainContainer;
@@ -54,9 +55,9 @@ public class MainWindow implements IMainContainer, ISession {
 	public MainWindow() {
 		this.menus = new HashMap<String, JMenu>();
 		this.initialize();
-		//this.loadLogin();
+		this.loadLogin();
 		// this.loadOthers();
-		this.loadAdminView();
+		//this.loadAdminView();
 	}
 
 	/**
@@ -95,7 +96,7 @@ public class MainWindow implements IMainContainer, ISession {
 	private void loadOthers() {
 		loadCloseSessionButton();
 		this.removeLoginAndStartSystem();
-		Set<String> roles = SessionStatus.getInst().getRoles(); // TODO
+		List<String> roles = SessionStatus.getInst().getRoles(); // TODO
 		for (String role : roles) {
 			switch (role) {
 			case Role.ADMIN:
@@ -146,11 +147,13 @@ public class MainWindow implements IMainContainer, ISession {
 	}
 
 	// this method is execute for the login form.
-	public void startSession(String token, String userName, Set<String> roles) {
-		SessionStatus.getInst().setUsername(userName);
-		SessionStatus.getInst().setToken(token);
-		SessionStatus.getInst().setRoles(roles);
+
+
+	@Override
+	public void startSession(SessionResponse r) {		
+		SessionStatus.getInst().setUsername(r.getUsername());
+		SessionStatus.getInst().setToken(r.getToken());
+		SessionStatus.getInst().setRoles(r.getRoles());
 		this.loadOthers();
-		System.out.println(SessionStatus.getInst().toString());
 	}
 }
