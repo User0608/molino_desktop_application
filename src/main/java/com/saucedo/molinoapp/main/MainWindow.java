@@ -13,6 +13,7 @@ import com.saucedo.molinoapp.SessionStatus;
 import com.saucedo.molinoapp.views.IMainContainer;
 import com.saucedo.molinoapp.views.login.ISession;
 import com.saucedo.molinoapp.views.login.Login;
+import com.saucedo.molinoapp.views.productores.ProductorView;
 import com.saucedo.molinoapp.views.usuario.*;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -102,6 +103,9 @@ public class MainWindow implements IMainContainer, ISession {
 			case Role.ADMIN:
 					this.loadAdminView();
 				break;
+			case Role.RECEPCION:
+				this.loadProductoresView();
+			break;
 			}
 		}
 
@@ -110,6 +114,11 @@ public class MainWindow implements IMainContainer, ISession {
 	private void loadAdminView() {
 		UsuarioPanel usuarioPanel = new UsuarioPanel(this);
 		this.addMenuItem(usuarioPanel.getMenuItem(), MenuCategory.MANAGER_CATEGORY);
+		loadProductoresView();
+	}
+	private void loadProductoresView() {
+		ProductorView produtorview = new ProductorView(this);
+		this.addMenuItem(produtorview.getMenuItem(), MenuCategory.REGISTRO_CATEGORY);
 	}
 
 	private void loadCloseSessionButton() {

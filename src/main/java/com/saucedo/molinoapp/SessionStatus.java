@@ -20,7 +20,6 @@ public class SessionStatus {
 		this.token = token;
 	}
 
-		
 	public String getUsername() {
 		return username;
 	}
@@ -33,7 +32,6 @@ public class SessionStatus {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-	
 	
 	
 	@Override

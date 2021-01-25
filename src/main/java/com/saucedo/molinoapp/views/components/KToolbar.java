@@ -1,4 +1,4 @@
-package com.saucedo.molinoapp.views.usuario;
+package com.saucedo.molinoapp.views.components;
 
 import javax.swing.JPanel;
 
@@ -15,10 +15,10 @@ import java.awt.Cursor;
 import javax.swing.border.TitledBorder;
 import javax.swing.UIManager;
 
-public class ToolbarUsuario extends JPanel implements ActionListener {
-	public static final String BUTTON_NEW = "usuario.nevo";
-	public static final String BUTTON_UPDATE = "usuario.update";
-	public static final String BUTTON_DELETE = "usuario.delete";
+public class KToolbar extends JPanel implements ActionListener {
+	public static final String BUTTON_NEW = "action.nevo";
+	public static final String BUTTON_UPDATE = "action.update";
+	public static final String BUTTON_DELETE = "action.delete";
 	ButtonActionToolbar buttonActionToolbar;
 
 	/**
@@ -29,7 +29,7 @@ public class ToolbarUsuario extends JPanel implements ActionListener {
 	private JButton btnUpdate;
 	private JButton btnDelete;
 
-	public ToolbarUsuario(ButtonActionToolbar listener) {
+	public KToolbar(ButtonActionToolbar listener) {
 		this.buttonActionToolbar = listener;
 		setBorder(new TitledBorder(null, "", TitledBorder.LEADING, TitledBorder.TOP, null, null));
 		setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
@@ -62,11 +62,11 @@ public class ToolbarUsuario extends JPanel implements ActionListener {
 		JButton button = (JButton) e.getSource();
 		String buttonType=null;
 		if (this.btnAddnew == button)
-			buttonType = ToolbarUsuario.BUTTON_NEW;
+			buttonType = KToolbar.BUTTON_NEW;
 		else if (this.btnUpdate == button)
-			buttonType = ToolbarUsuario.BUTTON_UPDATE;
+			buttonType = KToolbar.BUTTON_UPDATE;
 		else
-			buttonType = ToolbarUsuario.BUTTON_DELETE;
+			buttonType = KToolbar.BUTTON_DELETE;
 		if (this.buttonActionToolbar != null) {
 			this.buttonActionToolbar.onClickToolbarOption(buttonType);
 		}

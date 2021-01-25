@@ -3,12 +3,15 @@ package com.saucedo.molinoapp.views.usuario;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import com.saucedo.molino_json_models.JResponse;
 import com.saucedo.molino_json_models.security.JRole;
 import com.saucedo.molino_json_models.security.JUsuario;
 import com.saucedo.molinoapp.Error;
 import com.saucedo.molinoapp.exceptions.ResponseException;
 import com.saucedo.molinoapp.services.security.UsuarioService;
 import com.saucedo.molinoapp.views.IMainContainer;
+import com.saucedo.molinoapp.views.IMenu;
+
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
@@ -23,7 +26,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionToolbar, UsuarioDialog.ISubmitUser {
+public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionToolbar, UsuarioDialog.ISubmitUser,IMenu {
 
 	private static final long serialVersionUID = 12143544532L;
 	private IMainContainer parent;
@@ -47,9 +50,7 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 		this.loadTable();
 	}
 
-	public JMenuItem getMenuItem() {
-		return this.menuitem;
-	}
+	
 
 	private void initializeComponents() {
 		this.toolbar = new ToolbarUsuario(this);
@@ -63,16 +64,22 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 	}
 
 	/// Codigo para la tabla
-	public void loadTable() {
-
+	public void loadTable() {		
 		DefaultTableModel modeltable = new DefaultTableModel();
 		modeltable.setDataVector(this.dataInitialize(), this.generateColumnNames());
 		this.table = new JTable(modeltable);
 		this.table.setRowSelectionAllowed(true);
 		this.table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		this.table.setDefaultEditor(Object.class, null);
-		JScrollPane scrollPane = new JScrollPane(table);
+		JScrollPane scrollPane = new JScrollPane(table);		
 		add(scrollPane, BorderLayout.CENTER);
+	}
+	private void updateTable() {
+		this.table.removeAll();
+		DefaultTableModel modeltable = new DefaultTableModel();
+		modeltable.setDataVector(this.dataInitialize(), this.generateColumnNames());
+		this.table.setModel(modeltable);
+		this.table.repaint();
 	}
 
 	public Object[] generateColumnNames() {
@@ -103,16 +110,13 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 		return data;
 	}
 
-	private void showBoxMessage(String Message) {
-		JOptionPane.showMessageDialog(this, Message, "Error", JOptionPane.WARNING_MESSAGE);
-	}
+	
 
 	@Override
 	public void onClickToolbarOption(String buttontype) {
-		// TODO Auto-generated method stub
+		int row = this.table.getSelectedRow();
 		switch (buttontype) {
-		case ToolbarUsuario.BUTTON_UPDATE:
-			int row = this.table.getSelectedRow();
+		case ToolbarUsuario.BUTTON_UPDATE:			
 			if (row != -1) {
 				// Object[] columns= {"ID","Username","Roles","Owner","Status"};
 				Long id = (Long) this.table.getModel().getValueAt(row, 0);
@@ -144,13 +148,55 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 			this.usuarioDialog.setVisible(true);
 			break;
 		case ToolbarUsuario.BUTTON_DELETE:
+			if (row != -1) {
+				String username =(String) this.table.getModel().getValueAt(row, 1);
+				try {
+					int input = JOptionPane.showConfirmDialog(this, "Do you want to proceed?", "Select an Option...",
+			                JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
+					if(input==JOptionPane.YES_OPTION) {
+						this.service.delete(username);
+						this.updateTable();
+					}					
+					
+				} catch (ResponseException e) {
+					this.showBoxMessage("Error " + e.toString());
+					
+				}
+			} else {
+				this.showBoxMessage(Error.ERROR_ROW_NO_SELECTED_TABLE);
+			}
 			break;
-
 		}
 	}
 
 	@Override
 	public void notifyDialogAction(JUsuario usuario, String mode) {
+		JResponse response=null;
+		try {
+			switch (mode) {
+			case UsuarioDialog.MODE_EDIT:
+				response = this.service.update(usuario);				
+				break;
+			case UsuarioDialog.MODE_NEW:
+				response=this.service.insert(usuario);				
+				if(response.getResponse().equals(JResponse.ERROR_USUARI_EXISTE)) this.showBoxMessage("El user name ya existe");
+				break;
+			}
+			if(response.getResponse().equals(JResponse.OK)) this.usuarioDialog.setVisible(false);
+		} catch (ResponseException e) {
+			this.showBoxMessage("Eror "+e.toString());
+		}
+		this.updateTable();
+	}
 	
+	
+	private void showBoxMessage(String Message) {
+		JOptionPane.showMessageDialog(this, Message, "Error", JOptionPane.WARNING_MESSAGE);
+		
+	}
+
+	@Override
+	public JMenuItem getMenuItem() {
+		return this.menuitem;
 	}
 }

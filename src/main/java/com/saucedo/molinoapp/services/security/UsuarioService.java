@@ -6,6 +6,7 @@ import java.util.List;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
+import com.saucedo.molino_json_models.JResponse;
 import com.saucedo.molino_json_models.security.JRole;
 import com.saucedo.molino_json_models.security.JUsuario;
 import com.saucedo.molino_json_models.security.SessionRequest;
@@ -29,37 +30,57 @@ public class UsuarioService {
 		}
 		return response;
 	}
-	public List<JUsuario> parseJsonToArrayUsuarios(JSONArray rr){
+
+	private List<JUsuario> parseJsonToArrayUsuarios(JSONArray rr) {
 		List<JUsuario> usuarios = new ArrayList<>();
-		for(Object u:rr) {
+		for (Object u : rr) {
 			JSONObject item = (JSONObject) u;
 			JUsuario usuario = new JUsuario();
-			//Campos de usuario
+			// Campos de usuario
 			Long id = (Long) item.get("id");
 			String username = (String) item.get("username");
 			String owner = (String) item.get("owner");
-			Long status =(Long) item.get("status");
-			
+			Long status = (Long) item.get("status");
+
 			usuario.setId(id);
 			usuario.setUsername(username);
 			usuario.setStatus(status);
 			usuario.setOwner(owner);
-			
+
 			JSONArray rolesJson = (JSONArray) item.get("roles");
-			for(Object rol:rolesJson) {
+			for (Object rol : rolesJson) {
 				JSONObject roleJson = (JSONObject) rol;
 				JRole role = new JRole();
-				//Capos de role
+				// Capos de role
 				Long roleID = (Long) roleJson.get("id");
-				String noleName = (String)roleJson.get("name");
+				String noleName = (String) roleJson.get("name");
 				role.setId(roleID);
 				role.setName(noleName);
 				usuario.addRole(role);
 			}
-			
+
 			usuarios.add(usuario);
 		}
 		return usuarios;
+	}
+	@SuppressWarnings("unchecked")
+	private JSONObject parseUsuarioToJSON(JUsuario u) {
+		JSONObject json = new JSONObject();
+		if(u!=null) {
+			json.put("id",u.getId());
+			json.put("username",u.getUsername());
+			json.put("password",u.getPassword());
+			json.put("owner",u.getOwner());
+			json.put("status",u.getStatus());
+			JSONArray roles = new JSONArray();
+			for(JRole rol:u.getRoles()) {
+				JSONObject role = new JSONObject();
+				role.put("name", rol.getName());
+				roles.add(role);
+			}
+			json.put("roles",roles);
+		}
+		return json;
 	}
 
 	@SuppressWarnings({ "unchecked" })
@@ -80,7 +101,7 @@ public class UsuarioService {
 	}
 
 	public List<JUsuario> findAll() throws ResponseException {
-		if(SessionStatus.isStarted()) {
+		if (SessionStatus.isStarted()) {
 			JSONArray jsonResponse = null;
 			try {
 				jsonResponse = Request.get(Global.GET_ALL_USERS);
@@ -88,6 +109,43 @@ public class UsuarioService {
 			} catch (Exception e1) {
 				throw new ResponseException(Error.ERROR_CONNECTION_API_REST, "");
 			}
+		}
+		return null;
+	}
+	
+	public JResponse insert(JUsuario usuario) throws ResponseException {
+		JSONObject jsonResponse = null;				
+		if (SessionStatus.isStarted()) {
+			try {
+				jsonResponse = Request.post(Global.POST_INSERT_USER,this.parseUsuarioToJSON(usuario));
+			} catch (Exception e1) {				
+				throw new ResponseException(Error.ERROR_SESSION_USER_OR_PASSWORD, "");
+			}
+			return Request.parseJSONObjectToResponse(jsonResponse);
+		}
+		return null;
+	}
+	public JResponse update(JUsuario usuario) throws ResponseException {
+		JSONObject jsonResponse = null;				
+		if (SessionStatus.isStarted()) {
+			try {
+				jsonResponse = Request.put(Global.PUT_UPDATE_USER,this.parseUsuarioToJSON(usuario));
+			} catch (Exception e1) {
+				throw new ResponseException(Error.ERROR_SESSION_USER_OR_PASSWORD, "");
+			}
+			return Request.parseJSONObjectToResponse(jsonResponse);
+		}
+		return null;
+	}
+	public JResponse delete(String username) throws ResponseException {
+		JSONObject jsonResponse = null;				
+		if (SessionStatus.isStarted()) {
+			try {
+				jsonResponse = Request.delete(Global.DELETE_USER+username);
+			} catch (Exception e1) {
+				throw new ResponseException(Error.ERROR_SESSION_USER_OR_PASSWORD, "");
+			}
+			return Request.parseJSONObjectToResponse(jsonResponse);
 		}
 		return null;
 	}
