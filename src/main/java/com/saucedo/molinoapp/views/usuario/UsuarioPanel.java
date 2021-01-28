@@ -7,7 +7,10 @@ import com.saucedo.molino_json_models.JResponse;
 import com.saucedo.molino_json_models.security.JRole;
 import com.saucedo.molino_json_models.security.JUsuario;
 import com.saucedo.molinoapp.Error;
+import com.saucedo.molinoapp.Route;
 import com.saucedo.molinoapp.exceptions.ResponseException;
+import com.saucedo.molinoapp.main.Role;
+import com.saucedo.molinoapp.services.parseimplements.FactoryParse;
 import com.saucedo.molinoapp.services.security.UsuarioService;
 import com.saucedo.molinoapp.views.IMainContainer;
 import com.saucedo.molinoapp.views.IMenu;
@@ -40,8 +43,8 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 	/**
 	 * Create the panel.
 	 */
-	public UsuarioPanel(IMainContainer parent) {
-		this.service = new UsuarioService();
+	public UsuarioPanel(IMainContainer parent) {		
+		this.service =  new UsuarioService(FactoryParse.getUsurioParse(),new Route(Route.ROUTE_USUARIO));
 		this.parent = parent;
 		setBackground(Color.ORANGE);
 		this.menuitem = new JMenuItem("Usuarios");
@@ -104,13 +107,11 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 			}
 
 		} catch (ResponseException e) {
-			this.showBoxMessage(Error.ERROR_CONNECTION_API_REST);
+			this.showBoxMessage(Error.ERROR_CONNECTION_API_REST+", modulo de usuarios");
 		}
 
 		return data;
 	}
-
-	
 
 	@Override
 	public void onClickToolbarOption(String buttontype) {
@@ -150,13 +151,18 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 		case ToolbarUsuario.BUTTON_DELETE:
 			if (row != -1) {
 				String username =(String) this.table.getModel().getValueAt(row, 1);
-				try {
+				String role =(String) this.table.getModel().getValueAt(row, 2);
+				if(role.trim().equals(Role.ADMIN) ) {
+					this.showBoxMessage("Operacion no permitida");
+					return;
+				}
+				try {					
 					int input = JOptionPane.showConfirmDialog(this, "Do you want to proceed?", "Select an Option...",
 			                JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE);
 					if(input==JOptionPane.YES_OPTION) {
-						this.service.delete(username);
+						this.service.deleteByUserName(username);
 						this.updateTable();
-					}					
+					}				
 					
 				} catch (ResponseException e) {
 					this.showBoxMessage("Error " + e.toString());

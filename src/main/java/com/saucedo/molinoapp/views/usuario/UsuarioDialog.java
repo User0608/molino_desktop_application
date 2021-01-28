@@ -13,7 +13,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.saucedo.molino_json_models.security.*;
 import com.saucedo.molinoapp.Config;
-import com.saucedo.molinoapp.views.UserMessage;
+import com.saucedo.molinoapp.utils.*;
+import com.saucedo.molinoapp.views.error_message.UserMessage;
 
 import javax.swing.JTextField;
 import javax.swing.JLabel;
@@ -22,6 +23,8 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
 import javax.swing.JPasswordField;
+import org.eclipse.wb.swing.FocusTraversalOnArray;
+import java.awt.Component;
 
 public class UsuarioDialog extends JDialog implements ActionListener {
 
@@ -57,13 +60,14 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 	 * @wbp.parser.constructor
 	 */
 	public UsuarioDialog(ISubmitUser listener) {
+		setModal(true);
 		this.listener = listener;
 		this.mode = MODE_NEW;
 		this.isadmin=false;
-		this.setModal(true);
 		this.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 481, 291);
 		getContentPane().setLayout(new BorderLayout());
+		contentPanel.setAlignmentY(Component.BOTTOM_ALIGNMENT);
 		contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
 		getContentPane().add(contentPanel, BorderLayout.CENTER);
 		contentPanel.setLayout(null);
@@ -87,10 +91,12 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 		contentPanel.add(lblNewLabel_1);
 		
 		txtPassword = new JPasswordField();
+		txtPassword.setToolTipText("Password");
 		txtPassword.setBounds(43, 113, 171, 20);
 		contentPanel.add(txtPassword);
 
 		txtPassword2 = new JPasswordField();
+		txtPassword2.setToolTipText("Validar Password");
 		txtPassword2.setBounds(43, 144, 171, 20);
 		contentPanel.add(txtPassword2);
 
@@ -117,6 +123,7 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 		chSecado = new JCheckBox("Secado");
 		chSecado.setBounds(257, 143, 97, 23);
 		contentPanel.add(chSecado);
+		contentPanel.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{txtUsername, txtPassword, txtPassword2, chRecepcion, chSecado, btnSubmit}));
 
 
 	}
@@ -171,12 +178,10 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 		}	
 	}
 
-	public interface ISubmitUser {
-		void notifyDialogAction(JUsuario usuario, String mode);
-	}
 
 	@SuppressWarnings("deprecation")
 	private boolean prepareUsuario() {
+		KCheck check = new KCheck();
 		String username = this.txtUsername.getText().trim();
 		String password1 = this.txtPassword.getText();
 		String password2 = this.txtPassword2.getText();
@@ -189,15 +194,18 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 		if (this.chSecado.isSelected())
 			roles.add(new JRole(null, JRole.ROLE_SECADO));
 		// Valid data		
-		if (username.length() < Config.MIN_LENGHT_PASSWORD_AND_PASSWORD) {
-			this.showBoxMessage(UserMessage.FIALD_LENGTH_MINIM_USERNAME);
+		;
+		if(check.in(username).noEmptySpaces().onlyBasicsCaracteres().minLen(Config.MIN_LENGHT_PASSWORD_AND_PASSWORD).notOk()) {
+			this.showBoxMessage(check.getMessage()+", campo username");
 			return false;
 		}
-		if(password1.length()!=0 && password2.length()!=0 || mode==MODE_NEW) {
-			if (password1.length() < Config.MIN_LENGHT_PASSWORD_AND_PASSWORD) {
-				this.showBoxMessage(UserMessage.FIALD_LENGTH_MINIM_PASSWORD);
-				return false;
-			}
+		
+		if(password1.length()!=0 && password2.length()!=0 || mode==MODE_NEW) {			
+			
+			if(check.in(password1).noEmptySpaces().minLen(Config.MIN_LENGHT_PASSWORD_AND_PASSWORD).notOk()) {
+				this.showBoxMessage(check.getMessage()+", campo password");
+				return false; 
+			}			
 			if(!password1.equals(password2)) {
 				this.showBoxMessage(UserMessage.PASSWORD_DIFRENTES);
 				return false;
@@ -226,6 +234,9 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 	}
 	private void showBoxMessage(String Message) {
 		JOptionPane.showMessageDialog(this, Message, "Error", JOptionPane.WARNING_MESSAGE);
+	}
+	public interface ISubmitUser {
+		void notifyDialogAction(JUsuario usuario, String mode);
 	}
 
 }

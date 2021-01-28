@@ -3,12 +3,13 @@ package com.saucedo.molinoapp.views.login;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-
+import com.saucedo.molinoapp.services.parseimplements.FactoryParse;
 import com.saucedo.molinoapp.services.security.UsuarioService;
 import com.saucedo.molino_json_models.security.SessionRequest;
 import com.saucedo.molino_json_models.security.SessionResponse;
 import com.saucedo.molinoapp.Config;
 import com.saucedo.molinoapp.Error;
+import com.saucedo.molinoapp.Route;
 import com.saucedo.molinoapp.exceptions.ResponseException;
 
 import javax.swing.JLabel;
@@ -102,7 +103,8 @@ public class Login extends JPanel {
 							 JOptionPane.WARNING_MESSAGE);    
 					return;
 				}
-				UsuarioService service = new UsuarioService();
+			
+				UsuarioService service = new UsuarioService(FactoryParse.getUsurioParse(),new Route(Route.ROUTE_USUARIO));
 				SessionResponse response=null;
 				try {
 					response = service.initSession(new SessionRequest(data.get("username"),data.get("password")));

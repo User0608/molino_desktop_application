@@ -1,4 +1,4 @@
-package com.saucedo.molinoapp.views;
+package com.saucedo.molinoapp.views.error_message;
 
 import com.saucedo.molinoapp.Config;
 
