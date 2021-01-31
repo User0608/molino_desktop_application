@@ -15,36 +15,38 @@ public class UsuarioParse implements IParse<JUsuario>{
 	public List<JUsuario> parseJsonToArrayEntity(JSONArray rr) {
 		List<JUsuario> usuarios = new ArrayList<>();
 		for (Object u : rr) {
-			JSONObject item = (JSONObject) u;
-			JUsuario usuario = new JUsuario();
-			// Campos de usuario
-			Long id = (Long) item.get("id");
-			String username = (String) item.get("username");
-			String owner = (String) item.get("owner");
-			Long status = (Long) item.get("status");
-
-			usuario.setId(id);
-			usuario.setUsername(username);
-			usuario.setStatus(status);
-			usuario.setOwner(owner);
-
-			JSONArray rolesJson = (JSONArray) item.get("roles");
-			for (Object rol : rolesJson) {
-				JSONObject roleJson = (JSONObject) rol;
-				JRole role = new JRole();
-				// Capos de role
-				Long roleID = (Long) roleJson.get("id");
-				String noleName = (String) roleJson.get("name");
-				role.setId(roleID);
-				role.setName(noleName);
-				usuario.addRole(role);
-			}
-
-			usuarios.add(usuario);
+			JSONObject item = (JSONObject) u;	
+			usuarios.add(this.parseJsonToEntity(item));
 		}
 		return usuarios;
 	}
+	@Override
+	public JUsuario parseJsonToEntity(JSONObject oo) {
+		JUsuario usuario = new JUsuario();
+		// Campos de usuario
+		Long id = (Long) oo.get("id");
+		String username = (String) oo.get("username");
+		String owner = (String) oo.get("owner");
+		Long status = (Long) oo.get("status");
 
+		usuario.setId(id);
+		usuario.setUsername(username);
+		usuario.setStatus(status);
+		usuario.setOwner(owner);
+
+		JSONArray rolesJson = (JSONArray) oo.get("roles");
+		for (Object rol : rolesJson) {
+			JSONObject roleJson = (JSONObject) rol;
+			JRole role = new JRole();
+			// Capos de role
+			Long roleID = (Long) roleJson.get("id");
+			String noleName = (String) roleJson.get("name");
+			role.setId(roleID);
+			role.setName(noleName);
+			usuario.addRole(role);
+		}
+		return usuario;
+	}
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parseJEntityToJSONObject(JUsuario entity) {
@@ -65,5 +67,7 @@ public class UsuarioParse implements IParse<JUsuario>{
 		}
 		return json;
 	}
+
+	
 
 }

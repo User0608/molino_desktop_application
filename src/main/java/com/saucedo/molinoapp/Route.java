@@ -3,6 +3,7 @@ package com.saucedo.molinoapp;
 public class Route {
 	public static final String ROUTE_USUARIO="/usuario";
 	public static final String ROUTE_PRODUCTOR="/productor";
+	public static final String ROUTE_EMPLEADO="/empleado";
 
 	
 	private String host;

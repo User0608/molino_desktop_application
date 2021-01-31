@@ -182,24 +182,23 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 	@SuppressWarnings("deprecation")
 	private boolean prepareUsuario() {
 		KCheck check = new KCheck();
-		String username = this.txtUsername.getText().trim();
+		String username = this.txtUsername.getText();
 		String password1 = this.txtPassword.getText();
 		String password2 = this.txtPassword2.getText();
 		String owner = (this.mode == MODE_NEW) ? "usuario" : this.usuario.getOwner();
 		String status = this.cmbEstado.getSelectedItem().toString();
 		/// Roles
+		if(check.in(username).noEmptySpaces().onlyBasicsCaracteres().minLen(Config.MIN_LENGHT_PASSWORD_AND_PASSWORD).notOk()) {
+			this.showBoxMessage(check.getMessage()+", campo username");
+			return false;
+		}	
 		List<JRole> roles = new ArrayList<>();
 		if (this.chRecepcion.isSelected())
 			roles.add(new JRole(null, JRole.ROLE_RECEPCION));
 		if (this.chSecado.isSelected())
 			roles.add(new JRole(null, JRole.ROLE_SECADO));
 		// Valid data		
-		;
-		if(check.in(username).noEmptySpaces().onlyBasicsCaracteres().minLen(Config.MIN_LENGHT_PASSWORD_AND_PASSWORD).notOk()) {
-			this.showBoxMessage(check.getMessage()+", campo username");
-			return false;
-		}
-		
+			
 		if(password1.length()!=0 && password2.length()!=0 || mode==MODE_NEW) {			
 			
 			if(check.in(password1).noEmptySpaces().minLen(Config.MIN_LENGHT_PASSWORD_AND_PASSWORD).notOk()) {

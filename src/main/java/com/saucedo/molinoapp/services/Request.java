@@ -36,8 +36,20 @@ public class Request {
 		return jsonResult;
 	}
 	public static JSONArray get(String sURL) throws Exception {
-		URL url = new URL(sURL);
+		String response = getPatitionResposen(sURL);
+		JSONParser parser = new JSONParser();
+		JSONArray jsonResult = (JSONArray) parser.parse(response);		
+		return jsonResult;
+	}
+	public static JSONObject getWithParam(String sURL) throws Exception {
+		String response = getPatitionResposen(sURL);		
+		JSONParser parser = new JSONParser();
+		JSONObject jsonResult = (JSONObject) parser.parse(response);		
+		return jsonResult;
+	}
+	private static String getPatitionResposen(String sURL) throws Exception{
 		
+		URL url = new URL(sURL);		
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();		
 		conn.setRequestProperty("Content-Type", "application/json");
 		conn.setRequestProperty("Authorization", SessionStatus.getInst().getToken()); 
@@ -48,11 +60,11 @@ public class Request {
 		StringBuilder sb = new StringBuilder();
 		for (int c; (c = in.read()) >= 0;)
 			sb.append((char) c);
-		String response = sb.toString();		
-		JSONParser parser = new JSONParser();
-		JSONArray jsonResult = (JSONArray) parser.parse(response);		
-		return jsonResult;
+		String response = sb.toString();
+		return response;
 	}
+	
+	
 	
 	public static JSONObject post(String sURL, JSONObject json) throws Exception {		
 		return post(sURL, json,POST);

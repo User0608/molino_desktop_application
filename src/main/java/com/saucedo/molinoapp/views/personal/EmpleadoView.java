@@ -1,4 +1,4 @@
-package com.saucedo.molinoapp.views.productores;
+package com.saucedo.molinoapp.views.personal;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 import com.saucedo.molino_json_models.JResponse;
-import com.saucedo.molino_json_models.almacen.JProductor;
+import com.saucedo.molino_json_models.personal.JEmpleado;
 import com.saucedo.molinoapp.Error;
 import com.saucedo.molinoapp.Route;
 import com.saucedo.molinoapp.exceptions.ResponseException;
@@ -26,28 +26,31 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-public class ProductorView extends JPanel
-		implements IMenu, KToolbar.ButtonActionToolbar, ProductorDialog.ISubmitProductor {
-	public static final String THIS_WINDOWS_TITLE="Registro de productores";
+public class EmpleadoView extends JPanel
+		implements IMenu, KToolbar.ButtonActionToolbar, EmpleadoDialog.ISubmitProductor {
+	public static final String THIS_WINDOWS_TITLE="Registro de empleados";
+	public static final String STATUS_ACTIVE="activo";
+	public static final String STATUS_INHABILIDATDO="inhabilitado";
+	
+
 	private boolean huboErrorAlCargar;
 	private JMenuItem menuitem;
 	private KToolbar toolbar;
-	private Service<JProductor> service;
+	private Service<JEmpleado> service;
 	private static final long serialVersionUID = 54541L;
 	IMainContainer parent;
 	private JTable table;
-	private ProductorDialog productorDialog;
+	private EmpleadoDialog empleadoDialog;
 
-	public ProductorView(IMainContainer parent) {
+	public EmpleadoView(IMainContainer parent) {
 		this.huboErrorAlCargar = false;
 		this.parent = parent;
-		this.menuitem = new JMenuItem("Productores");
+		this.menuitem = new JMenuItem("Empleados");
 		setLayout(new BorderLayout(0, 0));
-		this.service = new Service<JProductor>(FParse.getProductorParse(),new Route(Route.ROUTE_PRODUCTOR));
+		this.service = new Service<JEmpleado>(FParse.getEmpleadoParse(),new Route(Route.ROUTE_EMPLEADO));
 		table = new JTable();
 		add(table, BorderLayout.CENTER);
 		initializeComponents();
-
 	}
 
 	private void initializeComponents() {
@@ -60,7 +63,7 @@ public class ProductorView extends JPanel
 					showBoxMessage("El modulo de clientes no fue cargado, hubo un error");
 				} else {
 					if (parent != null)
-						parent.setMainPanel(ProductorView.this,THIS_WINDOWS_TITLE);
+						parent.setMainPanel(EmpleadoView.this,THIS_WINDOWS_TITLE);
 				}
 			}
 		});
@@ -89,33 +92,32 @@ public class ProductorView extends JPanel
 
 	public Object[] generateColumnNames() {
 		Object[] columns = { "ID", "DNI", "Nombre", "Apellido Paterno", "Apellido Materno", "Direccion", "Telefono",
-				"Email" };
+				"Email","Fecha Contrato","Sueldo","Estado" };
 		return columns;
 
 	}
 
-	private JProductor getProductorFromTable(int row) {
-		JProductor productor = new JProductor();
+	private JEmpleado getEmpleadoFromTable(int row) {		
 		TableModel model = this.table.getModel();
-		productor.setId((Long) model.getValueAt(row, 0));
-		productor.setDni((String) model.getValueAt(row, 1));
-		productor.setNombre((String) model.getValueAt(row, 2));
-		productor.setApellidoPaterno((String) model.getValueAt(row, 3));
-		productor.setApellidoMaterno((String) model.getValueAt(row, 4));
-		productor.setDireccion((String) model.getValueAt(row, 5));
-		productor.setTelefon((String) model.getValueAt(row, 6));
-		productor.setEmail((String) model.getValueAt(row, 7));
-		return productor;
+		Long id = (Long) model.getValueAt(row, 0);
+		JEmpleado empleado=null;
+		try {
+			empleado = this.service.findByField(id.toString());
+		} catch (ResponseException e) {
+			this.showBoxMessage(Error.ERROR_BASIC);
+			e.printStackTrace();
+		}	
+		return empleado;
 	}
 
 	public Object[][] dataInitialize() {
 		Object[][] data = null;
-		List<JProductor> productores;
+		List<JEmpleado> productores;
 		try {
 			productores = this.service.findAll();
 			data = new Object[productores.size()][this.generateColumnNames().length];
 			for (int i = 0; i < productores.size(); i++) {
-				JProductor usuario = productores.get(i);
+				JEmpleado usuario = productores.get(i);
 				data[i][0] = usuario.getId();
 				data[i][1] = usuario.getDni();
 				data[i][2] = usuario.getNombre();
@@ -123,9 +125,14 @@ public class ProductorView extends JPanel
 				data[i][4] = usuario.getApellidoMaterno();
 				data[i][5] = usuario.getDireccion();
 				data[i][6] = usuario.getTelefon();
-				data[i][7] = usuario.getEmail();
+				data[i][7] = usuario.getEmail();				
+				data[i][8] = usuario.getFechaContrato()==null?"none": usuario.getFechaContrato().toString();
+				data[i][9] = usuario.getSueldo();
+				data[i][10] = usuario.isEstado()?STATUS_ACTIVE:STATUS_INHABILIDATDO;
 			}
 		} catch (ResponseException e) {
+			
+			e.printStackTrace();
 			this.huboErrorAlCargar = true;
 		}
 		return data;
@@ -146,17 +153,17 @@ public class ProductorView extends JPanel
 		switch (buttontype) {
 		case KToolbar.BUTTON_UPDATE:
 			if (rowSelected != -1) {
-				this.productorDialog = new ProductorDialog(this, this.getProductorFromTable(rowSelected));
-				this.productorDialog.prepareForm();
-				this.productorDialog.setVisible(true);
+				this.empleadoDialog = new EmpleadoDialog(this, this.getEmpleadoFromTable(rowSelected));
+				this.empleadoDialog.prepareForm();
+				this.empleadoDialog.setVisible(true);
 			} else {
 				this.showBoxMessage(Error.ERROR_ROW_NO_SELECTED_TABLE);
 			}
 			break;
 		case KToolbar.BUTTON_NEW:
-			this.productorDialog = new ProductorDialog(this);
-			this.productorDialog.prepareForm();
-			this.productorDialog.setVisible(true);
+			this.empleadoDialog = new EmpleadoDialog(this);
+			this.empleadoDialog.prepareForm();
+			this.empleadoDialog.setVisible(true);
 			break;
 		case KToolbar.BUTTON_DELETE:
 			if (rowSelected != -1) {
@@ -185,22 +192,22 @@ public class ProductorView extends JPanel
 	}
 
 	@Override
-	public void notifyDialogAction(JProductor productor, String mode) {
+	public void notifyDialogAction(JEmpleado empleado, String mode) {
 		JResponse response = null;
 		try {
 			switch (mode) {
-			case ProductorDialog.MODE_EDIT:
-				response = this.service.update(productor);
+			case EmpleadoDialog.MODE_EDIT:
+				response = this.service.update(empleado);
 				break;
-			case ProductorDialog.MODE_NEW:
-				response = this.service.insert(productor);
+			case EmpleadoDialog.MODE_NEW:
+				response = this.service.insert(empleado);
 				if (response.getResponse().equals(JResponse.ERROR_USUARI_EXISTE))
 					this.showBoxMessage("El user name ya existe");
 				break;
 			}
 			if (response != null) {
 				if (response.getResponse().equals(JResponse.OK))
-					this.productorDialog.setVisible(false);
+					this.empleadoDialog.setVisible(false);
 				else if (response.getResponse().equals(JResponse.ERROR))
 					this.showBoxMessage(Error.ERROR_BASIC);
 			} else {
@@ -210,8 +217,7 @@ public class ProductorView extends JPanel
 			this.showBoxMessage("Error " + e.toString());
 		}
 		this.updateTable();
-
 	}
 
-	
+
 }

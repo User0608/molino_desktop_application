@@ -30,19 +30,34 @@ public class Service<T> {
 				jsonResponse = Request.get(route.Getall());
 				return this.parse.parseJsonToArrayEntity(jsonResponse);
 			} catch (Exception e1) {
+			
 				throw new ResponseException(Error.ERROR_CONNECTION_API_REST, "");
 			}
 		}
 		return null;
 	}
-
+	public T findByField(String field) throws ResponseException {
+		if (this.parse == null&&this.route!=null)
+			return null;
+		if (SessionStatus.isStarted()) {
+			JSONObject jsonResponse = null;
+			try {
+				jsonResponse = Request.getWithParam(route.Get()+field);
+				return this.parse.parseJsonToEntity(jsonResponse);
+			} catch (Exception e1) {
+			
+				throw new ResponseException(Error.ERROR_CONNECTION_API_REST, "");
+			}
+		}
+		return null;
+	}
 	public JResponse insert(T entity) throws ResponseException {
 		if (this.parse == null&&this.route!=null)
 			return null;
 		JSONObject jsonResponse = null;
 		if (SessionStatus.isStarted()) {
 			try {
-				jsonResponse = Request.post(this.route.Post(), this.parse.parseJEntityToJSONObject(entity));
+				jsonResponse = Request.post(this.route.Post(), this.parse.parseJEntityToJSONObject(entity));			
 			} catch (Exception e1) {
 				throw new ResponseException(Error.ERROR_BASIC, "");
 			}

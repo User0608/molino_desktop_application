@@ -20,6 +20,7 @@ public class KCheck {
 	public static String MESSAGE_ERROR_MIN_LENGTH = "La cantidad minima de carácteres es ";
 	public static String MESSAGE_ERROR_MAX_LENGTH = "La contidad maxima de carácteres es ";
 	public static String MESSAGE_ERROR_LENGTH = "El numero de caracteres debe ser ";
+	public static String NO_IS_NUMBER = "El dato ingresado debe ser un numero";
 	private boolean state;
 	private String message;
 
@@ -129,19 +130,21 @@ public class KCheck {
 
 		public Filtro minLen(int length) {
 			if (!state)
-				if (this.target.length() < length) {
-					message = MESSAGE_ERROR_MIN_LENGTH + length;
-					state = false;
-				}
+				return this;
+			if (this.target.length() < length) {
+				message = MESSAGE_ERROR_MIN_LENGTH + length;
+				state = false;
+			}
 			return this;
 		}
 
 		public Filtro minLen() {
 			if (!state)
-				if (this.target.length() < DEFALUT_MIN_LENGTH) {
-					message = MESSAGE_ERROR_MIN_LENGTH + DEFALUT_MIN_LENGTH;
-					state = false;
-				}
+				return this;
+			if (this.target.length() < DEFALUT_MIN_LENGTH) {
+				message = MESSAGE_ERROR_MIN_LENGTH + DEFALUT_MIN_LENGTH;
+				state = false;
+			}
 			return this;
 		}
 
@@ -160,6 +163,17 @@ public class KCheck {
 				return this;
 			if (this.target.length() != length) {
 				message = MESSAGE_ERROR_LENGTH + length;
+				state = false;
+			}
+			return this;
+		}
+		public Filtro isNumber() {
+			if (!state)
+				return this;
+			try {
+				Double.parseDouble(target);
+			}catch(NumberFormatException e){
+				message = NO_IS_NUMBER;
 				state = false;
 			}
 			return this;

@@ -13,6 +13,7 @@ import com.saucedo.molinoapp.SessionStatus;
 import com.saucedo.molinoapp.views.IMainContainer;
 import com.saucedo.molinoapp.views.login.ISession;
 import com.saucedo.molinoapp.views.login.Login;
+import com.saucedo.molinoapp.views.personal.EmpleadoView;
 import com.saucedo.molinoapp.views.productores.ProductorView;
 import com.saucedo.molinoapp.views.usuario.*;
 import javax.swing.JFrame;
@@ -87,11 +88,11 @@ public class MainWindow implements IMainContainer, ISession {
 	}
 
 	private void loadLogin() {
-		this.setMainPanel(new Login(this));
+		this.setMainPanel(new Login(this),"Login");
 	}
 
 	private void removeLoginAndStartSystem() {
-		this.setMainPanel(new JPanel()); // TODO menu de bienvenida
+		this.setMainPanel(new JPanel(),"Principal"); // TODO menu de bienvenida
 	}
 
 	private void loadOthers() {
@@ -115,10 +116,15 @@ public class MainWindow implements IMainContainer, ISession {
 		UsuarioPanel usuarioPanel = new UsuarioPanel(this);
 		this.addMenuItem(usuarioPanel.getMenuItem(), MenuCategory.MANAGER_CATEGORY);
 		loadProductoresView();
+		loadEmpleadoView();
 	}
 	private void loadProductoresView() {
 		ProductorView produtorview = new ProductorView(this);
 		this.addMenuItem(produtorview.getMenuItem(), MenuCategory.REGISTRO_CATEGORY);
+	}
+	private void loadEmpleadoView() {
+		EmpleadoView empleadoView = new EmpleadoView(this);
+		this.addMenuItem(empleadoView.getMenuItem(), MenuCategory.MANAGER_CATEGORY);
 	}
 
 	private void loadCloseSessionButton() {
@@ -147,16 +153,16 @@ public class MainWindow implements IMainContainer, ISession {
 	}
 
 	// Method implemented from the interface IModule
-	public void setMainPanel(JPanel panel) {
+	@Override
+	public void setMainPanel(JPanel panel,String title) {
+		this.frmMolino.setTitle(title);
 		containerPanel.removeAll();
 		containerPanel.revalidate();
 		containerPanel.repaint();
 		containerPanel.add(panel, BorderLayout.CENTER);
-
 	}
 
 	// this method is execute for the login form.
-
 
 	@Override
 	public void startSession(SessionResponse r) {		

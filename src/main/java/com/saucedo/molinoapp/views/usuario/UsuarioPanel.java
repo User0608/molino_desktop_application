@@ -10,7 +10,7 @@ import com.saucedo.molinoapp.Error;
 import com.saucedo.molinoapp.Route;
 import com.saucedo.molinoapp.exceptions.ResponseException;
 import com.saucedo.molinoapp.main.Role;
-import com.saucedo.molinoapp.services.parseimplements.FactoryParse;
+import com.saucedo.molinoapp.services.parseimplements.FParse;
 import com.saucedo.molinoapp.services.security.UsuarioService;
 import com.saucedo.molinoapp.views.IMainContainer;
 import com.saucedo.molinoapp.views.IMenu;
@@ -30,6 +30,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
 public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionToolbar, UsuarioDialog.ISubmitUser,IMenu {
+	public static final String THIS_WINDOWS_TITLE="Usuarios del sistema";
 
 	private static final long serialVersionUID = 12143544532L;
 	private IMainContainer parent;
@@ -44,7 +45,7 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 	 * Create the panel.
 	 */
 	public UsuarioPanel(IMainContainer parent) {		
-		this.service =  new UsuarioService(FactoryParse.getUsurioParse(),new Route(Route.ROUTE_USUARIO));
+		this.service =  new UsuarioService(FParse.getUsurioParse(),new Route(Route.ROUTE_USUARIO));
 		this.parent = parent;
 		setBackground(Color.ORANGE);
 		this.menuitem = new JMenuItem("Usuarios");
@@ -60,8 +61,9 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 		this.add(toolbar, BorderLayout.NORTH);
 		this.menuitem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				updateTable();
 				if (parent != null)
-					parent.setMainPanel(UsuarioPanel.this);
+					parent.setMainPanel(UsuarioPanel.this,THIS_WINDOWS_TITLE);
 			}
 		});
 	}
@@ -205,4 +207,6 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 	public JMenuItem getMenuItem() {
 		return this.menuitem;
 	}
+
+
 }
