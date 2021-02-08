@@ -14,6 +14,7 @@ import javax.swing.border.EmptyBorder;
 import com.saucedo.molino_json_models.security.*;
 import com.saucedo.molinoapp.Config;
 import com.saucedo.molinoapp.utils.*;
+import com.saucedo.molinoapp.views.ISubmitDialog;
 import com.saucedo.molinoapp.views.error_message.UserMessage;
 
 import javax.swing.JTextField;
@@ -27,13 +28,13 @@ import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 
 public class UsuarioDialog extends JDialog implements ActionListener {
-
+	public static final String DIALOG_KEY ="com.saucedo.molinoapp.views.usuario.UsuarioDialog";
 	private static final long serialVersionUID = 32222222545323L;
 	public static final String MODE_EDIT = "usuario.edit";
 	public static final String MODE_NEW = "usuario.new";
 	private JUsuario usuario;
 	private String mode;
-	private ISubmitUser listener;
+	private ISubmitDialog listener;
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtUsername;
@@ -50,7 +51,7 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 	
 	public boolean isadmin;
 
-	public UsuarioDialog(ISubmitUser listener, JUsuario usuario) {
+	public UsuarioDialog(ISubmitDialog listener, JUsuario usuario) {
 		this(listener);
 		this.usuario = usuario;
 		this.mode = MODE_EDIT;
@@ -59,7 +60,7 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public UsuarioDialog(ISubmitUser listener) {
+	public UsuarioDialog(ISubmitDialog listener) {
 		setModal(true);
 		this.listener = listener;
 		this.mode = MODE_NEW;
@@ -227,15 +228,11 @@ public class UsuarioDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (this.listener != null && this.prepareUsuario()) {
 			if (usuario != null) {
-				this.listener.notifyDialogAction(usuario, mode);
+				this.listener.notifyDialogAction(usuario, mode,DIALOG_KEY);
 			}
 		}
 	}
 	private void showBoxMessage(String Message) {
 		JOptionPane.showMessageDialog(this, Message, "Error", JOptionPane.WARNING_MESSAGE);
 	}
-	public interface ISubmitUser {
-		void notifyDialogAction(JUsuario usuario, String mode);
-	}
-
 }

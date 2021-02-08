@@ -11,6 +11,7 @@ import com.saucedo.molino_json_models.security.SessionResponse;
 import com.saucedo.molinoapp.Config;
 import com.saucedo.molinoapp.SessionStatus;
 import com.saucedo.molinoapp.views.IMainContainer;
+import com.saucedo.molinoapp.views.almacen.RegistroIngresoView;
 import com.saucedo.molinoapp.views.login.ISession;
 import com.saucedo.molinoapp.views.login.Login;
 import com.saucedo.molinoapp.views.personal.EmpleadoView;
@@ -106,6 +107,7 @@ public class MainWindow implements IMainContainer, ISession {
 				break;
 			case Role.RECEPCION:
 				this.loadProductoresView();
+				this.loadRegistroIngresoView();
 			break;
 			}
 		}
@@ -117,6 +119,7 @@ public class MainWindow implements IMainContainer, ISession {
 		this.addMenuItem(usuarioPanel.getMenuItem(), MenuCategory.MANAGER_CATEGORY);
 		loadProductoresView();
 		loadEmpleadoView();
+		loadRegistroIngresoView();
 	}
 	private void loadProductoresView() {
 		ProductorView produtorview = new ProductorView(this);
@@ -126,7 +129,10 @@ public class MainWindow implements IMainContainer, ISession {
 		EmpleadoView empleadoView = new EmpleadoView(this);
 		this.addMenuItem(empleadoView.getMenuItem(), MenuCategory.MANAGER_CATEGORY);
 	}
-
+	private void loadRegistroIngresoView(){
+		RegistroIngresoView ingreso =  new RegistroIngresoView(this);
+		this.addMenuItem(ingreso.getMenuItem(),MenuCategory.REGISTRO_CATEGORY);
+	}
 	private void loadCloseSessionButton() {
 		JMenuItem closeSession = new JMenuItem("Salir");
 		closeSession.addActionListener(new ActionListener() {
@@ -169,6 +175,11 @@ public class MainWindow implements IMainContainer, ISession {
 		SessionStatus.getInst().setUsername(r.getUsername());
 		SessionStatus.getInst().setToken(r.getToken());
 		SessionStatus.getInst().setRoles(r.getRoles());
+		SessionStatus.getInst().setOwner(r.getOwner());
+		String owner = r.getOwner();
+		
+		String[] parts = owner.split("[.]+");
+		
 		this.loadOthers();
 	}
 }

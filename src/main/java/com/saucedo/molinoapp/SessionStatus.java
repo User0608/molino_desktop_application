@@ -6,6 +6,7 @@ import java.util.List;
 public class SessionStatus {
 	private String token;
 	private String username;
+	private String owner;
 	private List<String> roles;
 	private static final Object object = new Object();
 	private static SessionStatus instance;
@@ -25,6 +26,13 @@ public class SessionStatus {
 	}
 	public void setUsername(String username) {
 		this.username = username;
+	}
+	
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
 	public List<String> getRoles() {
 		return roles;

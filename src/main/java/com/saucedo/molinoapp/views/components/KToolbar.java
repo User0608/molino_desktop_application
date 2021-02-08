@@ -19,15 +19,15 @@ public class KToolbar extends JPanel implements ActionListener {
 	public static final String BUTTON_NEW = "action.nevo";
 	public static final String BUTTON_UPDATE = "action.update";
 	public static final String BUTTON_DELETE = "action.delete";
-	ButtonActionToolbar buttonActionToolbar;
-
+	
+	protected ButtonActionToolbar buttonActionToolbar;
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4309549832489L;
-	private JButton btnAddnew;
-	private JButton btnUpdate;
-	private JButton btnDelete;
+	protected JButton btnAddnew;
+	protected JButton btnUpdate;
+	protected JButton btnDelete;
 
 	public KToolbar(ButtonActionToolbar listener) {
 		this.buttonActionToolbar = listener;
@@ -38,8 +38,7 @@ public class KToolbar extends JPanel implements ActionListener {
 		flowLayout.setAlignment(FlowLayout.LEFT);
 		loadButton();
 	}
-
-	public void loadButton() {
+	protected void loadNewAndUpdateButton() {
 		this.btnAddnew = new JButton("Nuevo");
 		this.btnAddnew.setToolTipText("Agregar nuevo usuario");
 		this.btnAddnew.addActionListener(this);
@@ -50,12 +49,18 @@ public class KToolbar extends JPanel implements ActionListener {
 		this.btnUpdate.setHorizontalAlignment(SwingConstants.RIGHT);
 		this.btnUpdate.addActionListener(this);
 		this.add(this.btnUpdate);
-
+	}
+	protected void loadDeleteButton() {
 		this.btnDelete = new JButton("Eliminar");
 		this.btnDelete.setBackground(UIManager.getColor("ToggleButton.light"));
 		this.btnDelete.addActionListener(this);
 		this.add(this.btnDelete);
 	}
+	public void loadButton() {
+		loadNewAndUpdateButton();
+		loadDeleteButton();
+	}
+	
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -65,9 +70,9 @@ public class KToolbar extends JPanel implements ActionListener {
 			buttonType = KToolbar.BUTTON_NEW;
 		else if (this.btnUpdate == button)
 			buttonType = KToolbar.BUTTON_UPDATE;
-		else
+		else if (this.btnDelete==button)
 			buttonType = KToolbar.BUTTON_DELETE;
-		if (this.buttonActionToolbar != null) {
+		if (this.buttonActionToolbar != null && buttonType!=null) {
 			this.buttonActionToolbar.onClickToolbarOption(buttonType);
 		}
 	}

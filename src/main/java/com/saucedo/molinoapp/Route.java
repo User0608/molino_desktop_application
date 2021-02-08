@@ -5,18 +5,18 @@ public class Route {
 	public static final String ROUTE_PRODUCTOR="/productor";
 	public static final String ROUTE_EMPLEADO="/empleado";
 
+	public static final String ROUTE_ARROZ_PROCEDENCIA="/arroz/procedencia";
+	public static final String ROUTE_ARROZ_TIPO="/arroz/tipo";
+	public static final String ROUTE_ARROZ_LOTE="/arroz/ingreso_lote";
 	
 	private String host;
 	private String rootpath;
-	
 	
 	private String getall;
 	private String get;	
 	private String put;
 	private String post;
 	private String delete;
-
-	
 	
 	public Route(String rootpath) {
 		this.host=Global.SERVER_PATH;

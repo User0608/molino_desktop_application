@@ -1,4 +1,4 @@
-package com.saucedo.molinoapp.services.parseimplements;
+package com.saucedo.molinoapp.services.parseimplements.alamcen;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,6 +7,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.saucedo.molino_json_models.almacen.JProductor;
+import com.saucedo.molinoapp.services.parseimplements.IParse;
 
 public class ProductorParse implements IParse<JProductor> {
 

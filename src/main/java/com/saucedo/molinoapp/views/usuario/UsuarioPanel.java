@@ -14,6 +14,7 @@ import com.saucedo.molinoapp.services.parseimplements.FParse;
 import com.saucedo.molinoapp.services.security.UsuarioService;
 import com.saucedo.molinoapp.views.IMainContainer;
 import com.saucedo.molinoapp.views.IMenu;
+import com.saucedo.molinoapp.views.ISubmitDialog;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -29,7 +30,7 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
-public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionToolbar, UsuarioDialog.ISubmitUser,IMenu {
+public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionToolbar,ISubmitDialog,IMenu {
 	public static final String THIS_WINDOWS_TITLE="Usuarios del sistema";
 
 	private static final long serialVersionUID = 12143544532L;
@@ -178,15 +179,15 @@ public class UsuarioPanel extends JPanel implements ToolbarUsuario.ButtonActionT
 	}
 
 	@Override
-	public void notifyDialogAction(JUsuario usuario, String mode) {
+	public void notifyDialogAction(Object usuario, String mode,String sender) {
 		JResponse response=null;
 		try {
 			switch (mode) {
 			case UsuarioDialog.MODE_EDIT:
-				response = this.service.update(usuario);				
+				response = this.service.update((JUsuario)usuario);				
 				break;
 			case UsuarioDialog.MODE_NEW:
-				response=this.service.insert(usuario);				
+				response=this.service.insert((JUsuario)usuario);				
 				if(response.getResponse().equals(JResponse.ERROR_USUARI_EXISTE)) this.showBoxMessage("El user name ya existe");
 				break;
 			}

@@ -62,9 +62,9 @@ public class KCheck {
 		public Filtro onlyBasicsCaracteres() {
 			if (!state)
 				return this;
-			String validCharacters = "qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM1234567890-_";
+			String validCharacters = "!\"#$%&'()*+,./:;<=>?@`[\\]^_`{|}~";
 			for (char a : this.target.toCharArray()) {
-				if (validCharacters.indexOf(a) == -1) {
+				if (validCharacters.indexOf(a)!=-1) {
 					state = false;
 					message = a + MESSAGE_ERROR_VALID_CARACTERS;
 					break;
@@ -72,7 +72,9 @@ public class KCheck {
 			}
 			return this;
 		}
-
+		
+		
+		
 		public Filtro noEmptySpaces() {
 			if (!state)
 				return this;

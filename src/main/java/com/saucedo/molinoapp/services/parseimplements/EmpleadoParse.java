@@ -63,7 +63,6 @@ public class EmpleadoParse implements IParse<JEmpleado> {
 			if(uid!=null) {
 				emp.setUsuario(FParse.getUsurioParse().parseJsonToEntity(jusuario));
 			}
-			System.out.println("Hasta aca llego.."+emp.getUsuario());
 		}		
 		return emp;
 	}

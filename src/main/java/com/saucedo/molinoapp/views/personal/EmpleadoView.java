@@ -14,6 +14,7 @@ import com.saucedo.molinoapp.services.Service;
 import com.saucedo.molinoapp.services.parseimplements.FParse;
 import com.saucedo.molinoapp.views.IMainContainer;
 import com.saucedo.molinoapp.views.IMenu;
+import com.saucedo.molinoapp.views.ISubmitDialog;
 import com.saucedo.molinoapp.views.components.KToolbar;
 
 import java.awt.BorderLayout;
@@ -27,7 +28,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 public class EmpleadoView extends JPanel
-		implements IMenu, KToolbar.ButtonActionToolbar, EmpleadoDialog.ISubmitProductor {
+		implements IMenu, KToolbar.ButtonActionToolbar, ISubmitDialog {
 	public static final String THIS_WINDOWS_TITLE="Registro de empleados";
 	public static final String STATUS_ACTIVE="activo";
 	public static final String STATUS_INHABILIDATDO="inhabilitado";
@@ -192,15 +193,15 @@ public class EmpleadoView extends JPanel
 	}
 
 	@Override
-	public void notifyDialogAction(JEmpleado empleado, String mode) {
+	public void notifyDialogAction(Object empleado, String mode,String sender) {
 		JResponse response = null;
 		try {
 			switch (mode) {
 			case EmpleadoDialog.MODE_EDIT:
-				response = this.service.update(empleado);
+				response = this.service.update((JEmpleado)empleado);
 				break;
 			case EmpleadoDialog.MODE_NEW:
-				response = this.service.insert(empleado);
+				response = this.service.insert((JEmpleado)empleado);
 				if (response.getResponse().equals(JResponse.ERROR_USUARI_EXISTE))
 					this.showBoxMessage("El user name ya existe");
 				break;

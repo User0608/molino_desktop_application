@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import com.saucedo.molino_json_models.almacen.JProductor;
 import com.saucedo.molinoapp.Config;
 import com.saucedo.molinoapp.utils.KCheck;
+import com.saucedo.molinoapp.views.ISubmitDialog;
 import com.saucedo.molinoapp.views.error_message.General;
 
 import javax.swing.JTextField;
@@ -23,6 +24,7 @@ public class ProductorDialog extends JDialog implements ActionListener {
 	/**
 	 * 
 	 */
+	public static final String DIALOG_KEY ="com.saucedo.molinoapp.views.productores.ProductoresDialog";
 	private static final long serialVersionUID = 143243L;
 	public static final String TITLE_MODE_EDIT = "Editar productor";
 	public static final String TITLE_MODE_NEW = "Nuevo productor";
@@ -31,7 +33,7 @@ public class ProductorDialog extends JDialog implements ActionListener {
 	public static final String MODE_NEW = "productor.new";
 	private JProductor productor;
 	private String mode;
-	ISubmitProductor targetListener;
+	ISubmitDialog targetListener;
 
 	private final JPanel contentPanel = new JPanel();
 	private JTextField txtDni;
@@ -42,7 +44,7 @@ public class ProductorDialog extends JDialog implements ActionListener {
 	private JTextField txtTelefono;
 	private JTextField txtEmail;
 
-	public ProductorDialog(ISubmitProductor target, JProductor productor) {
+	public ProductorDialog(ISubmitDialog target, JProductor productor) {
 		this(target);
 		this.productor = productor;
 		this.mode = MODE_EDIT;
@@ -52,7 +54,7 @@ public class ProductorDialog extends JDialog implements ActionListener {
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public ProductorDialog(ISubmitProductor target) {
+	public ProductorDialog(ISubmitDialog target) {
 		this.productor = new JProductor();
 		this.mode = MODE_NEW;
 		this.setTitle(TITLE_MODE_NEW);
@@ -208,7 +210,7 @@ public class ProductorDialog extends JDialog implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if (this.targetListener != null) {
 			if (this.validFildsAndPrepareObject())
-				this.targetListener.notifyDialogAction(this.productor, this.mode);
+				this.targetListener.notifyDialogAction(this.productor, this.mode,DIALOG_KEY);
 		}
 	}
 
@@ -216,7 +218,4 @@ public class ProductorDialog extends JDialog implements ActionListener {
 		JOptionPane.showMessageDialog(this, Message, General.TITLE_DIALOG_ERROR_FILDS, JOptionPane.WARNING_MESSAGE);
 	}
 
-	public interface ISubmitProductor {
-		void notifyDialogAction(JProductor productor, String mode);
-	}
 }

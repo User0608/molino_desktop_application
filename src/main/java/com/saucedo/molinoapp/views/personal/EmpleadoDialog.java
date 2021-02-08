@@ -11,6 +11,7 @@ import com.saucedo.molino_json_models.personal.JEmpleado;
 import com.saucedo.molino_json_models.security.JUsuario;
 import com.saucedo.molinoapp.Config;
 import com.saucedo.molinoapp.utils.KCheck;
+import com.saucedo.molinoapp.views.ISubmitDialog;
 import com.saucedo.molinoapp.views.error_message.General;
 import com.saucedo.molinoapp.views.usuario.*;
 
@@ -25,8 +26,9 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.border.BevelBorder;
 
-public class EmpleadoDialog extends JDialog implements ActionListener, UsuarioDialog.ISubmitUser {
+public class EmpleadoDialog extends JDialog implements ActionListener, ISubmitDialog {
 
+	public static final String DIALOG_KEY ="com.saucedo.molinoapp.views.personal.EmpleadoDialog";
 	private static final long serialVersionUID = 143243L;
 	public static final String TITLE_MODE_EDIT = "Editar empleado";
 	public static final String TITLE_MODE_NEW = "Nuevo empleado";
@@ -35,7 +37,7 @@ public class EmpleadoDialog extends JDialog implements ActionListener, UsuarioDi
 	public static final String MODE_NEW = "empleado.new";
 	private JEmpleado empleado;
 	private String mode;
-	ISubmitProductor targetListener;
+	ISubmitDialog targetListener;
 	
 	private boolean hadUser=false;
 
@@ -61,7 +63,7 @@ public class EmpleadoDialog extends JDialog implements ActionListener, UsuarioDi
 	private JUsuario usuario;
 	private JButton btnremove;
 
-	public EmpleadoDialog(ISubmitProductor target, JEmpleado empleado) {
+	public EmpleadoDialog(ISubmitDialog target, JEmpleado empleado) {
 		this(target);
 		this.empleado = empleado;
 		JUsuario u = this.empleado.getUsuario();
@@ -78,7 +80,7 @@ public class EmpleadoDialog extends JDialog implements ActionListener, UsuarioDi
 	/**
 	 * @wbp.parser.constructor
 	 */
-	public EmpleadoDialog(ISubmitProductor target) {
+	public EmpleadoDialog(ISubmitDialog target) {
 		this.empleado = new JEmpleado();
 		this.mode = MODE_NEW;
 		this.setTitle("Empleado");
@@ -345,7 +347,7 @@ public class EmpleadoDialog extends JDialog implements ActionListener, UsuarioDi
 	public void actionPerformed(ActionEvent e) {
 		if (this.targetListener != null) {
 			if (this.validFildsAndPrepareObject())
-				this.targetListener.notifyDialogAction(this.empleado, this.mode);
+				this.targetListener.notifyDialogAction(this.empleado, this.mode,DIALOG_KEY);
 		}
 	}
 
@@ -353,13 +355,9 @@ public class EmpleadoDialog extends JDialog implements ActionListener, UsuarioDi
 		JOptionPane.showMessageDialog(this, Message, General.TITLE_DIALOG_ERROR_FILDS, JOptionPane.WARNING_MESSAGE);
 	}
 
-	public interface ISubmitProductor {
-		void notifyDialogAction(JEmpleado empleado, String mode);
-	}
-
 	@Override
-	public void notifyDialogAction(JUsuario usuario, String mode) {
-		this.usuario = usuario;
+	public void notifyDialogAction(Object usuario, String mode, String sender) {
+		this.usuario = (JUsuario)usuario;
 		this.usuarioDialog.setVisible(false);
 		this.loadUserData();
 
