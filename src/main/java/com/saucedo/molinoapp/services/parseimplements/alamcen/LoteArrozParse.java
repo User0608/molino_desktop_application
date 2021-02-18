@@ -22,6 +22,7 @@ public class LoteArrozParse implements IParse<JLoteArroz> {
 	}
 	@Override
 	public JLoteArroz parseJsonToEntity(JSONObject jp) {
+		if(jp==null) return null;
 		JLoteArroz entity = new JLoteArroz();
 		Long id = (Long) jp.get("id");
 		Long numeroSacos = (Long) jp.get("numeroSacos");
@@ -34,7 +35,7 @@ public class LoteArrozParse implements IParse<JLoteArroz> {
 		entity.setId(id);
 		entity.setNumeroSacos(numeroSacos.intValue());
 		if (ingreso!=null)
-			entity.setIngreso(FParse.getRegistroIngresoParse().parseJsonToEntity(ingreso));
+			entity.setIngreso(FParse.getRegistroIngreso().parseJsonToEntity(ingreso));
 		if (productor!=null)
 			entity.setProductor(FParse.getProductorParse().parseJsonToEntity(productor));
 		if (procedencia!=null)
@@ -49,7 +50,7 @@ public class LoteArrozParse implements IParse<JLoteArroz> {
 		JSONObject json = new JSONObject();
 		json.put("id",entity.getId());
 		json.put("numeroSacos",entity.getNumeroSacos());
-		json.put("ingreso",FParse.getRegistroIngresoParse().parseJEntityToJSONObject(entity.getIngreso()));
+		json.put("ingreso",FParse.getRegistroIngreso().parseJEntityToJSONObject(entity.getIngreso()));
 		json.put("productor",FParse.getProductorParse().parseJEntityToJSONObject(entity.getProductor()));
 		json.put("procedencia",FParse.getProcedenciaParse().parseJEntityToJSONObject(entity.getProcedencia()));
 		json.put("tipoArroz",FParse.getTipoArrozParse().parseJEntityToJSONObject(entity.getTipoArroz()));

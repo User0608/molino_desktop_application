@@ -22,6 +22,8 @@ import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
+import java.awt.Font;
+import java.awt.Color;
 
 public class Login extends JPanel {
 	/**
@@ -33,6 +35,7 @@ public class Login extends JPanel {
 	private JButton signin;
 
 	private ISession notifySession;
+	private JLabel lblNewLabel;
 
 	/**
 	 * Create the panel.
@@ -43,27 +46,33 @@ public class Login extends JPanel {
 		txtUsername = new JTextField();
 		txtUsername.setText("kevin002");
 		txtUsername.setToolTipText("Ingrese usuario");
-		txtUsername.setBounds(55, 54, 237, 20);
+		txtUsername.setBounds(317, 236, 237, 20);
 		add(txtUsername);
 		txtUsername.setColumns(10);
 
 		JLabel lbluser = new JLabel("Usuario");
-		lbluser.setBounds(55, 37, 194, 14);
+		lbluser.setBounds(317, 219, 194, 14);
 		add(lbluser);
 
 		JLabel lblpass = new JLabel("Password");
-		lblpass.setBounds(55, 77, 148, 14);
+		lblpass.setBounds(317, 259, 148, 14);
 		add(lblpass);
 
 		signin = new JButton("Sign IN");
-		signin.setBounds(201, 122, 89, 23);
+		signin.setBounds(465, 313, 89, 23);
 		add(signin);
 
 		txtPassword = new JPasswordField();
 		txtPassword.setText("maira002");
 		txtPassword.setToolTipText("Ingrese contraseña ");
-		txtPassword.setBounds(55, 91, 237, 20);
+		txtPassword.setBounds(317, 273, 237, 20);
 		add(txtPassword);
+		
+		lblNewLabel = new JLabel("Bienvenido");
+		lblNewLabel.setForeground(new Color(0, 100, 0));
+		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 30));
+		lblNewLabel.setBounds(344, 153, 173, 53);
+		add(lblNewLabel);
 		this.initEventsComponents();
 
 	}

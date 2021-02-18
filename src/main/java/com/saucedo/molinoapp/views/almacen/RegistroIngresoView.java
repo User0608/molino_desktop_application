@@ -44,7 +44,7 @@ public class RegistroIngresoView extends JPanel implements IMenu, KToolbar.Butto
 		this.parent = parent;
 		this.menuitem = new JMenuItem(MENU_ITEM_NAME);
 		setLayout(new BorderLayout(0, 0));
-		this.service = new Service<JLoteArroz>(FParse.getLoteArrozParseParse(), new Route(Route.ROUTE_ARROZ_LOTE));
+		this.service = new Service<JLoteArroz>(FParse.getLoteArrozParse(), new Route(Route.ROUTE_ARROZ_LOTE));
 		table = new JTable();
 		add(table, BorderLayout.CENTER);
 		initializeComponents();

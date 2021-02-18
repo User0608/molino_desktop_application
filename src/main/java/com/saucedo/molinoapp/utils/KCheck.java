@@ -13,12 +13,12 @@ public class KCheck {
 	public static String MESSAGE_ERROR_EMPTY_SPACES = "No se permite espacios en blanco";
 	public static String MESSAGE_ERROR_START_SPACES = "Hay espacios al inicio";
 	public static String MESSAGE_ERROR_END_SPACES = "Hay espacios al final";
-	public static String MESSAGE_ERROR_MANY_SPACES = "Demaciados espacios en blanco";
+	public static String MESSAGE_ERROR_MANY_SPACES = "Demasiados espacios en blanco";
 
 	public static String MESSAGE_ERROR_NO_EMAIL = "El email ingresado no es valido";
 
 	public static String MESSAGE_ERROR_MIN_LENGTH = "La cantidad minima de carácteres es ";
-	public static String MESSAGE_ERROR_MAX_LENGTH = "La contidad maxima de carácteres es ";
+	public static String MESSAGE_ERROR_MAX_LENGTH = "La cantidad maxima de carácteres es ";
 	public static String MESSAGE_ERROR_LENGTH = "El numero de caracteres debe ser ";
 	public static String NO_IS_NUMBER = "El dato ingresado debe ser un numero";
 	private boolean state;

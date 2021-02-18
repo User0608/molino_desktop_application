@@ -21,6 +21,7 @@ public class ProductorParse implements IParse<JProductor> {
 	}
 	@Override
 	public JProductor parseJsonToEntity(JSONObject jp) {
+		if(jp==null) return null;
 		JProductor p = new JProductor();
 		Long id = (Long) jp.get("id");
 		String dni = (String) jp.get("dni");

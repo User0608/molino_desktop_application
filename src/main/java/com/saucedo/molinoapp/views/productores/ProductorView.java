@@ -53,6 +53,7 @@ public class ProductorView extends JPanel
 
 	private void initializeComponents() {
 		this.toolbar = new KToolbar(this);
+		this.toolbar.setModeluTitle(THIS_WINDOWS_TITLE);
 		this.add(this.toolbar, BorderLayout.NORTH);
 		this.menuitem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

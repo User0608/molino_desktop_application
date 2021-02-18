@@ -30,7 +30,7 @@ public class Service<T> {
 				jsonResponse = Request.get(route.Getall());
 				return this.parse.parseJsonToArrayEntity(jsonResponse);
 			} catch (Exception e1) {
-			
+				System.out.println(e1.getMessage());
 				throw new ResponseException(Error.ERROR_CONNECTION_API_REST, "");
 			}
 		}

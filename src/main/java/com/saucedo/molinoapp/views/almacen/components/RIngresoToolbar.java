@@ -11,7 +11,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
-import javax.swing.UIManager;
+import java.awt.Color;
+import javax.swing.JLabel;
+import java.awt.Font;
 
 public class RIngresoToolbar extends KToolbar {
 	public static final String BUTTON_DETALLE = "action.detalle";
@@ -22,26 +24,39 @@ public class RIngresoToolbar extends KToolbar {
 	private JTextField txtBuscar;
 	private JComboBox<String> cmbFiltroType;
 	private JButton btnDetalle;
+	private JLabel lblRegistroDeIngreso;
+	private Component rigidArea_1;
 	
 	public RIngresoToolbar(ButtonActionToolbar listener) {
 		super(listener);
 		
 		btnDetalle = new JButton("Detalles");
+		btnDetalle.setForeground(new Color(255, 255, 255));
+		btnDetalle.setBackground(new Color(0, 128, 128));
 		btnDetalle.addActionListener(this);
 		add(btnDetalle);
 		
 		Component rigidArea = Box.createRigidArea(new Dimension(55, 20));
 		add(rigidArea);
 		
+		lblRegistroDeIngreso = new JLabel("Registro de ingreso de arroz al molino");
+		lblRegistroDeIngreso.setForeground(new Color(0, 128, 128));
+		lblRegistroDeIngreso.setFont(new Font("Tahoma", Font.BOLD, 23));
+		add(lblRegistroDeIngreso);
+		
+		rigidArea_1 = Box.createRigidArea(new Dimension(55, 20));
+		add(rigidArea_1);
+		
 		txtBuscar = new JTextField();
 		txtBuscar.setToolTipText("Insertar dato a buscar");
 		add(txtBuscar);
-		txtBuscar.setColumns(40);
+		txtBuscar.setColumns(20);
 		
 		cmbFiltroType = new JComboBox<String>();
+		cmbFiltroType.setForeground(new Color(255, 255, 255));
 		cmbFiltroType.setToolTipText("Seleccion de criterio del filtrado");
-		cmbFiltroType.setBackground(UIManager.getColor("Button.background"));
-		cmbFiltroType.setModel(new DefaultComboBoxModel(new String[] {"Productores"}));
+		cmbFiltroType.setBackground(new Color(178, 34, 34));
+		cmbFiltroType.setModel(new DefaultComboBoxModel<String>(new String[] {"Productores"}));
 		add(cmbFiltroType);
 	}
 
