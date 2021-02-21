@@ -1,4 +1,4 @@
-package com.saucedo.molinoapp.views.almacen;
+package com.saucedo.molinoapp.views.almacen.dialogs;
 
 import java.awt.BorderLayout;
 
@@ -236,7 +236,9 @@ public class RegistroIngresoSecadoDialog extends JDialog implements ActionListen
 		List<String> lotes = new ArrayList<String>();
 		lotes.add("");
 		for (JLoteArroz arroz : this.lotesDeArroz) {
-			lotes.add("Lote: " + arroz.getId() + ", " + arroz.getProductor().completeName());
+			if(arroz.getNumeroSacos()>0) {				
+				lotes.add("Lote: " + arroz.getId() + ", " + arroz.getProductor().completeName()+" ("+arroz.getNumeroSacos()+")");
+			}
 		}
 		this.cmbLoteArroz.setModel(new DefaultComboBoxModel<String>(lotes.toArray(new String[0])));
 		List<String> areasSecado = new ArrayList<String>();

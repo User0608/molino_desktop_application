@@ -34,6 +34,7 @@ public class UbicacionParse implements IParse<JUbicacion> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parseJEntityToJSONObject(JUbicacion entity) {
+		if(entity==null) return null;
 		JSONObject json = new JSONObject();
 		json.put("id", entity.getId());
 		json.put("codigo", entity.getCodigo());

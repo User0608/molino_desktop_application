@@ -16,6 +16,8 @@ import com.saucedo.molinoapp.views.IMainContainer;
 import com.saucedo.molinoapp.views.IMenu;
 import com.saucedo.molinoapp.views.ISubmitDialog;
 import com.saucedo.molinoapp.views.almacen.components.RIngresoToolbar;
+import com.saucedo.molinoapp.views.almacen.detalles.DetalleRegistroIngresoLote;
+import com.saucedo.molinoapp.views.almacen.dialogs.RegistroIngresoDialog;
 import com.saucedo.molinoapp.views.components.KToolbar;
 
 import java.awt.BorderLayout;
@@ -37,8 +39,10 @@ public class RegistroIngresoView extends JPanel implements IMenu, KToolbar.Butto
 	IMainContainer parent;
 	private JTable table;
 	private RegistroIngresoDialog ingresoDialog;
+	private DetalleRegistroIngresoLote detalleLoteView;
+	
 	private Service<JLoteArroz> service;
-
+	private List<JLoteArroz> lotesArroz;
 	public RegistroIngresoView(IMainContainer parent) {
 		this.huboErrorAlCargar = false;
 		this.parent = parent;
@@ -66,7 +70,14 @@ public class RegistroIngresoView extends JPanel implements IMenu, KToolbar.Butto
 		});
 		this.loadTable();
 	}
-
+	private JLoteArroz filterLoteArrozById(Long id) {
+		for(JLoteArroz lot : this.lotesArroz) {
+			if(lot.getId()==id) {
+				return lot;
+			}
+		}
+		return null;
+	}
 	/// Codigo para la tabla
 	public void loadTable() {
 		DefaultTableModel modeltable = new DefaultTableModel();
@@ -88,7 +99,7 @@ public class RegistroIngresoView extends JPanel implements IMenu, KToolbar.Butto
 	}
 
 	public Object[] generateColumnNames() {
-		Object[] columns = { "ID",  "Productor","DNI", "Numero Sacos", "Tipo Arroz", "Empleado", "Fecha", "Hora"};
+		Object[] columns = { "ID",  "Productor","DNI", "Numero Sacos", "Tipo Arroz", "Empleado", "Fecha", "Hora","Sacos"};
 		return columns;
 
 	}
@@ -109,7 +120,6 @@ public class RegistroIngresoView extends JPanel implements IMenu, KToolbar.Butto
 
 	public Object[][] dataInitialize() {
 		Object[][] data = null;
-	List<JLoteArroz> lotesArroz;
 	try {
 		lotesArroz = this.service.findAll();
 		
@@ -119,11 +129,12 @@ public class RegistroIngresoView extends JPanel implements IMenu, KToolbar.Butto
 				data[i][0] = lote.getId();
 				data[i][1] = lote.getProductor().completeName();
 				data[i][2] = lote.getProductor().getDni();
-				data[i][3] = Integer.toString(lote.getNumeroSacos());
+				data[i][3] = lote.getIngreso().getNumeroSacos();
 				data[i][4] = lote.getTipoArroz().getNombre();
 				data[i][5] = lote.getIngreso().getEmpleado().completeName();
 				data[i][6] = lote.getIngreso().getFecha().toString();
 				data[i][7] = lote.getIngreso().getHora().toString();
+				data[i][8] = lote.getNumeroSacos();
 		}
 		} catch (ResponseException e) {
 			this.huboErrorAlCargar = true;
@@ -183,6 +194,16 @@ public class RegistroIngresoView extends JPanel implements IMenu, KToolbar.Butto
 				this.showBoxMessage(Error.ERROR_ROW_NO_SELECTED_TABLE);
 			}
 
+			break;
+		case RIngresoToolbar.BUTTON_DETALLE:
+			if (rowSelected != -1) {
+				Long id = (Long) table.getModel().getValueAt(rowSelected, 0);
+				this.detalleLoteView = new DetalleRegistroIngresoLote(this.filterLoteArrozById(id));
+				this.detalleLoteView.setVisible(true);
+			} else {
+				this.showBoxMessage(Error.ERROR_ROW_NO_SELECTED_TABLE);
+			}
+			
 			break;
 		}
 		this.table.clearSelection();

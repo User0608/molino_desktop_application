@@ -45,6 +45,7 @@ public class LoteSecadoParse implements IParse<JLoteSecado> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parseJEntityToJSONObject(JLoteSecado entity) {
+		if(entity==null) return null;
 		JSONObject json = new JSONObject();
 		json.put("id",entity.getId());
 		json.put("fecha",entity.getFecha());

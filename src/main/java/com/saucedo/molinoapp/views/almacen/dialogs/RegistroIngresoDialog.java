@@ -1,4 +1,4 @@
-package com.saucedo.molinoapp.views.almacen;
+package com.saucedo.molinoapp.views.almacen.dialogs;
 
 import java.awt.BorderLayout;
 
@@ -455,9 +455,6 @@ public class RegistroIngresoDialog extends JDialog implements ActionListener, IS
 			e.printStackTrace();
 		}
 	}
-//	private void loadEntity() {
-//		
-
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (this.targetListener != null) {

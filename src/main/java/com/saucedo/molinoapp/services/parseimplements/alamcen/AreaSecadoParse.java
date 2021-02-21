@@ -37,6 +37,7 @@ public class AreaSecadoParse implements IParse<JAreaSecado> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parseJEntityToJSONObject(JAreaSecado entity) {
+		if(entity==null) return null;
 		JSONObject json = new JSONObject();
 		json.put("id",entity.getId());
 		

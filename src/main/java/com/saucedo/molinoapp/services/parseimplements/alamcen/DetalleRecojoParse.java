@@ -40,11 +40,12 @@ public class DetalleRecojoParse implements IParse<JDetalleRecojo> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parseJEntityToJSONObject(JDetalleRecojo entity) {
+		if(entity==null) return null;
 		JSONObject json = new JSONObject();
 		json.put("id",entity.getId());
-		json.put("fecha",entity.getFecha());
-		json.put("hora",entity.getHora());
-		json.put("numeroSacos",45);
+		json.put("fecha",null);
+		json.put("hora",null);
+		json.put("numeroSacos",entity.getNumeroSacos());
 		json.put("humedad",entity.getHumedad());
 		return json;
 	}

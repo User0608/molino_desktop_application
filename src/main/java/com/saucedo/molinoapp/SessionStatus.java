@@ -40,7 +40,12 @@ public class SessionStatus {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
-	
+	public boolean hasRole(String r ) {
+		for(String rol: this.roles) {
+			if(rol.equals(r.toUpperCase())) return true;
+		}
+		return false;
+	}
 	
 	@Override
 	public String toString() {
@@ -58,6 +63,7 @@ public class SessionStatus {
 			return SessionStatus.instance;
 		}
 	}
+	
 	public static boolean isStarted() {
 		return SessionStatus.instance!=null;
 	}

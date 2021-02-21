@@ -41,11 +41,12 @@ public class DetalleTendidoParse implements IParse<JDetalleTendido> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parseJEntityToJSONObject(JDetalleTendido entity) {
+		if(entity==null) return null;
 		JSONObject json = new JSONObject();
 		json.put("id",entity.getId());
 		json.put("ubicacion", entity.getUbicacion());
-		json.put("fecha",entity.getFecha());
-		json.put("hora",entity.getHora());
+		json.put("fecha",null);
+		json.put("hora",null);
 		json.put("detalleRecojo",entity.getDetalleRecojo());
 		return json;
 	}

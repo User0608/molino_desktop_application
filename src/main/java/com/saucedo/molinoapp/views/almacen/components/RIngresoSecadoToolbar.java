@@ -18,9 +18,14 @@ import javax.swing.DefaultComboBoxModel;
 
 public class RIngresoSecadoToolbar extends KToolbar implements ItemListener{
 	public static final String BUTTON_DETALLE = "action.detalle";
+	public static final String BUTTON_REGISTRAR_TENDIDO = "action.registrar_tendido";
+	public static final String BUTTON_REGISTRAR_RECOJO ="action.registrar_recojo";
+	
 	public static final String TABLE_VIEW_ONE = "Area de Secado";
 	public static final String TABLE_VIEW_TWO = "Tendido";
 	public static final String TABLE_VIEW_THREE = "Proceso completado";
+
+	public static final String TABLE_VIEW_HISTORY = "Historial";
 
 	private static final long serialVersionUID = -7200916498009691187L;
 	private JButton btnDetalle;
@@ -31,6 +36,7 @@ public class RIngresoSecadoToolbar extends KToolbar implements ItemListener{
 	private boolean flag=true;
 	private JButton btnRegistroTendido;
 	private JButton btnRecogerTendido;
+	
 	public RIngresoSecadoToolbar(ButtonActionToolbarSecado listener) {
 		super(listener);
 		listenerSecado = listener;
@@ -42,13 +48,14 @@ public class RIngresoSecadoToolbar extends KToolbar implements ItemListener{
 		btnRegistroTendido = new JButton("Registrar Tendido");
 		btnRegistroTendido.setBackground(new Color(250, 128, 114));
 		add(btnRegistroTendido);
+		btnRegistroTendido.addActionListener(this);
 		
 		btnRecogerTendido = new JButton("Recoger Tendido");
 		btnRecogerTendido.setForeground(new Color(255, 255, 255));
 		btnRecogerTendido.setBackground(new Color(75, 0, 130));
 		add(btnRecogerTendido);
 		add(btnDetalle);
-		
+		btnRecogerTendido.addActionListener(this);
 		Component rigidArea = Box.createRigidArea(new Dimension(55, 20));
 		add(rigidArea);
 		
@@ -78,6 +85,10 @@ public class RIngresoSecadoToolbar extends KToolbar implements ItemListener{
 		String buttonType=null;
 		if (this.btnDetalle == button)
 			buttonType = RIngresoSecadoToolbar.BUTTON_DETALLE;		
+		if(this.btnRecogerTendido == button)
+			buttonType = RIngresoSecadoToolbar.BUTTON_REGISTRAR_RECOJO;
+		if(this.btnRegistroTendido == button)
+			buttonType = RIngresoSecadoToolbar.BUTTON_REGISTRAR_TENDIDO;
 	
 		if (buttonActionToolbar != null && buttonType!=null) {
 			buttonActionToolbar.onClickToolbarOption(buttonType);
@@ -86,17 +97,30 @@ public class RIngresoSecadoToolbar extends KToolbar implements ItemListener{
 	public void setNone() {
 		this.btnRecogerTendido.setVisible(false);
 		this.btnRegistroTendido.setVisible(false);
+		buttonsVisible(true);
 	}
 	
 	public void setTendido() {
-		this.btnRecogerTendido.setVisible(false);
-		this.btnRegistroTendido.setVisible(true);
+		btnRecogerTendido.setVisible(false);
+		btnRegistroTendido.setVisible(true);
+		buttonsVisible(true);
 	}
 	public void setRecojo() {
-		this.btnRecogerTendido.setVisible(true);
-		this.btnRegistroTendido.setVisible(false);
+		btnRecogerTendido.setVisible(true);
+		btnRegistroTendido.setVisible(false);
+		buttonsVisible(true);
 	}
-
+	public void setHistory() {
+		btnRecogerTendido.setVisible(false);
+		btnRegistroTendido.setVisible(false);
+		buttonsVisible(false);
+	}
+	private void buttonsVisible(boolean flag) {
+		if (btnDelete !=null) btnDelete.setVisible(flag);
+		if (btnUpdate !=null) btnUpdate.setVisible(flag);
+		if (btnAddnew !=null) btnAddnew.setVisible(flag);
+	}
+	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
 		// TODO Auto-generated method stub

@@ -43,6 +43,7 @@ public class IngresoSecadoParse implements IParse<JIngresoSecado> {
 	@SuppressWarnings("unchecked")
 	@Override
 	public JSONObject parseJEntityToJSONObject(JIngresoSecado entity) {
+		if(entity==null) return null;
 		JSONObject json = new JSONObject();
 		json.put("id",entity.getId());
 		json.put("fecha",null);

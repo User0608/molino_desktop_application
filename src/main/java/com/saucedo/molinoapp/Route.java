@@ -9,7 +9,9 @@ public class Route {
 	public static final String ROUTE_ARROZ_TIPO="/arroz/tipo";
 	public static final String ROUTE_ARROZ_LOTE="/arroz/ingreso_lote";
 	public static final String ROUTE_ARROZ_INGRESO_SECADO="/arroz/ingreso_secado";
-
+	public static final String ROUTE_ARROZ_INGRESO_SECADO_TENDIDO="/arroz/detalle_tendido";
+	public static final String ROUTE_ARROZ_INGRESO_SECADO_RECOJO="/arroz/detalle_recojo";
+	
 	public static final String ROUTE_AREA_SECADO="/area/secado";
 	
 	private String host;
