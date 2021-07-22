@@ -123,12 +123,12 @@ public class RIngresoSecadoToolbar extends KToolbar implements ItemListener{
 	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		// TODO Auto-generated method stub
 		if(listenerSecado!=null) {
 			if(flag==true) { listenerSecado.onViewChangeEvent((String)this.vistaSelected.getSelectedItem());}
 			flag=!flag;
 		}
 	}
+	
 	public interface ButtonActionToolbarSecado extends ButtonActionToolbar{
 		public void onViewChangeEvent(String view);
 	}

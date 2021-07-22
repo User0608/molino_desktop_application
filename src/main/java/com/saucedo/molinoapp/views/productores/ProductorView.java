@@ -175,8 +175,11 @@ public class ProductorView extends JPanel
 					this.showBoxMessage(Error.ERROR_BASIC);
 					e.printStackTrace();
 				}
-				if (response!=null&&response.getResponse().equals(JResponse.ERROR))
+				if (response!=null&&response.getResponse().equals(JResponse.ERROR)) {
 					this.showBoxMessage(Error.ERROR_BASIC);
+				}else if (response.getResponse().equals(JResponse.REGISTRO_DNI_DUPLICADO)) {
+					this.showBoxMessage(Error.ERROR_DNI);
+				}
 			} else {
 				this.showBoxMessage(Error.ERROR_ROW_NO_SELECTED_TABLE);
 			}

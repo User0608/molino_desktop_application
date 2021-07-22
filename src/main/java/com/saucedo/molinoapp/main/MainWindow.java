@@ -17,6 +17,8 @@ import com.saucedo.molinoapp.views.login.ISession;
 import com.saucedo.molinoapp.views.login.Login;
 import com.saucedo.molinoapp.views.personal.EmpleadoView;
 import com.saucedo.molinoapp.views.productores.ProductorView;
+import com.saucedo.molinoapp.views.reports.ArrozReport;
+import com.saucedo.molinoapp.views.reports.ProductorReportView;
 import com.saucedo.molinoapp.views.usuario.*;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -94,13 +96,14 @@ public class MainWindow implements IMainContainer, ISession {
 	}
 
 	private void removeLoginAndStartSystem() {
-		this.setMainPanel(new JPanel(),"Principal"); // TODO menu de bienvenida
+		this.setMainPanel(new JPanel(),"Principal");
 	}
 
 	private void loadOthers() {
+		this.loadHome();
 		loadCloseSessionButton();
 		this.removeLoginAndStartSystem();
-		List<String> roles = SessionStatus.getInst().getRoles(); // TODO
+		List<String> roles = SessionStatus.getInst().getRoles();
 		for (String role : roles) {
 			switch (role) {
 			case Role.ADMIN:
@@ -109,10 +112,17 @@ public class MainWindow implements IMainContainer, ISession {
 			case Role.RECEPCION:
 				this.loadProductoresView();
 				this.loadRegistroIngresoView();
+				break;
+			case Role.SECADO:
+				this.loadRegistroIngresoSecadoView();
 			break;
 			}
 		}
-
+	}
+	
+	private void loadHome() {
+		MainView mainview = new MainView(this);
+		this.addMenuItem(mainview.getMenuItem(), MenuCategory.START_HOME);
 	}
 
 	private void loadAdminView() {
@@ -122,8 +132,17 @@ public class MainWindow implements IMainContainer, ISession {
 		loadEmpleadoView();
 		loadRegistroIngresoView();
 		loadRegistroIngresoSecadoView();
+		loadReportsProductores();
+		loadReportsArroz();
 	}
-	
+	private void loadReportsProductores() {
+		ProductorReportView ppv = new ProductorReportView(this);
+		this.addMenuItem(ppv.getMenuItem(),MenuCategory.REPORT);
+	}
+	private void loadReportsArroz() {
+		ArrozReport ppv = new ArrozReport(this);
+		this.addMenuItem(ppv.getMenuItem(),MenuCategory.REPORT);
+	}
 	private void loadProductoresView() {
 		ProductorView produtorview = new ProductorView(this);
 		this.addMenuItem(produtorview.getMenuItem(), MenuCategory.REGISTRO_CATEGORY);
@@ -140,7 +159,7 @@ public class MainWindow implements IMainContainer, ISession {
 		RegistroIngresoSecadoView registro = new RegistroIngresoSecadoView(this);
 		this.addMenuItem(registro.getMenuItem(), MenuCategory.REGISTRO_CATEGORY);
 	}
-	private void loadCloseSessionButton() {
+	private void loadCloseSessionButton() {		
 		JMenuItem closeSession = new JMenuItem("Salir");
 		closeSession.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -176,7 +195,6 @@ public class MainWindow implements IMainContainer, ISession {
 	}
 
 	// this method is execute for the login form.
-
 	@Override
 	public void startSession(SessionResponse r) {		
 		SessionStatus.getInst().setUsername(r.getUsername());
@@ -184,5 +202,6 @@ public class MainWindow implements IMainContainer, ISession {
 		SessionStatus.getInst().setRoles(r.getRoles());
 		SessionStatus.getInst().setOwner(r.getOwner());		
 		this.loadOthers();
+		this.setMainPanel(new MainView(this),MainView.THIS_WINDOWS_TITLE_VIEW_ONE);
 	}
 }

@@ -3,6 +3,7 @@
 	<name>molino-app</name>
 	<comment></comment>
 	<projects>
+		<project>molino-json-models</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

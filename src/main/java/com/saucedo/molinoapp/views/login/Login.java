@@ -44,7 +44,7 @@ public class Login extends JPanel {
 		this.notifySession = target;
 		setLayout(null);
 		txtUsername = new JTextField();
-		txtUsername.setText("kevin002");
+		txtUsername.setText("");
 		txtUsername.setToolTipText("Ingrese usuario");
 		txtUsername.setBounds(317, 236, 237, 20);
 		add(txtUsername);
@@ -63,7 +63,7 @@ public class Login extends JPanel {
 		add(signin);
 
 		txtPassword = new JPasswordField();
-		txtPassword.setText("maira002");
+		txtPassword.setText("");
 		txtPassword.setToolTipText("Ingrese contraseña ");
 		txtPassword.setBounds(317, 273, 237, 20);
 		add(txtPassword);
@@ -111,8 +111,7 @@ public class Login extends JPanel {
 							 Error.ERROR_DATA_FIELDS_USER_OR_PASSWORD,"Error",
 							 JOptionPane.WARNING_MESSAGE);    
 					return;
-				}
-			
+				}			
 				UsuarioService service = new UsuarioService(FParse.getUsurioParse(),new Route(Route.ROUTE_USUARIO));
 				SessionResponse response=null;
 				try {
@@ -120,6 +119,12 @@ public class Login extends JPanel {
 				} catch (ResponseException e1) {
 					JOptionPane.showMessageDialog(Login.this,
 							Error.ERROR_SESSION_USER_OR_PASSWORD,"Error",
+							 JOptionPane.WARNING_MESSAGE);  
+					return;
+				}
+				if(response.getStatus()==0) {
+					JOptionPane.showMessageDialog(Login.this,
+							Error.USUARIO_INHABILITADO,"Error",
 							 JOptionPane.WARNING_MESSAGE);  
 					return;
 				}

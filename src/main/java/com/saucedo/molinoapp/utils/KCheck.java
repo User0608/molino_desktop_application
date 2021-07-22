@@ -189,11 +189,5 @@ public class KCheck {
 			return !state;
 		}
 	}
-
-	public static void main(String[] args) {
-		String target = "38928493";
-		KCheck check = new KCheck();
-		System.out.println(check.in(target).noEmptySpaces().onlyNumbers().ok());
-		System.out.println(check.getMessage());
-	}
+	
 }

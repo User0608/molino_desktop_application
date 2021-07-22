@@ -210,8 +210,11 @@ public class EmpleadoView extends JPanel
 			if (response != null) {
 				if (response.getResponse().equals(JResponse.OK))
 					this.empleadoDialog.setVisible(false);
-				else if (response.getResponse().equals(JResponse.ERROR))
+				else if (response.getResponse().equals(JResponse.ERROR)) {
 					this.showBoxMessage(Error.ERROR_BASIC);
+				}else if (response.getResponse().equals(JResponse.REGISTRO_DNI_DUPLICADO)) {
+					this.showBoxMessage(Error.ERROR_DNI);
+				}
 			} else {
 				this.showBoxMessage(Error.ERROR_BASIC + ", No hubo respuesta del servidor");
 			}

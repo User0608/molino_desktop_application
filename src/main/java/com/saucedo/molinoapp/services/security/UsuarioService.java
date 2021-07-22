@@ -27,6 +27,7 @@ public class UsuarioService extends Service<JUsuario> {
 		response.setToken((String) r.get("token"));
 		response.setUsername((String) r.get("username"));
 		response.setOwner((String)r.get("owner"));
+		response.setStatus(((Long)r.get("status")).intValue());
 		for (Object o : array_roles) {
 			String rol = (String) o;
 			response.addRole(rol);
